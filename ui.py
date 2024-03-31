@@ -4,66 +4,97 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, \
     QPushButton, QLabel, QMessageBox
 
+from util import camera
+from util import public_tools as tool
+from service import hr_service as hr
+
+ADMIN_LOGIN = False  # 管理员登录状态
+
 
 class ButtonImage(QPushButton):
     def __init__(self, name_label, image_url):
         super().__init__()
+        self.initUI(name_label, image_url)
+
+    def initUI(self, name_label, image_url):
         self.resize(300, 300)
-        h_box = QVBoxLayout()
-        self.name_label = QLabel(name_label, self)
-        self.name_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.image_label = QLabel(self)
-        self.image_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        hr.load_emp_data()  # 数据初始化
+        # 使用内部布局
+        self.layout = QVBoxLayout(self)
+        # 设置标签居中
+        alignment = Qt.AlignHCenter | Qt.AlignVCenter
+        # 创建并设置名称标签
+        self.name_label = QLabel(name_label)
+        self.name_label.setAlignment(alignment)
+        # 创建并设置图片标签
+        self.image_label = QLabel()
         pixmap = QPixmap(image_url)
         self.image_label.setPixmap(pixmap)
-        h_box.addWidget(self.image_label)
-        h_box.addWidget(self.name_label)
-        self.setLayout(h_box)
+        self.image_label.setAlignment(alignment)
+        # 将标签添加到布局中
+        self.layout.addWidget(self.image_label)
+        self.layout.addWidget(self.name_label)
 
 
 class MainWin(QWidget):
     def __init__(self):
         super(MainWin, self).__init__()
-        self.resize(400, 300)
-        h_layout = QHBoxLayout()
-        self.setLayout(h_layout)
-        button1 = ButtonImage("人脸打卡", 'icon/人脸打卡.png')
-        button2 = ButtonImage("员工管理", 'icon/员工管理.png')
-        button3 = ButtonImage("查看报表", 'icon/查看报表.png')
-        button4 = ButtonImage("查看记录", 'icon/查看记录.png')
-        button5 = ButtonImage("退出", 'icon/退出.png')
-        for item in (button1, button2, button3,button4, button5):
-            item.setFixedSize(300, 300)
-        button1.clicked.connect(self.button1_event)
-        button2.clicked.connect(self.button2_event)
-        button3.clicked.connect(self.button3_event)
-        button4.clicked.connect(self.button4_event)
-        button5.clicked.connect(self.button5_event)
-        h_layout.addWidget(button1)
-        h_layout.addWidget(button2)
-        h_layout.addWidget(button3)
-        h_layout.addWidget(button4)
-        h_layout.addWidget(button5)
+        self.resize(900, 600)
+        self.h_layout = QHBoxLayout(self)  # 直接设置给self，避免额外的变量
+        self.h_layout.setContentsMargins(100, 0, 100, 0)
+        # 按钮的标签和图标路径
+        buttons_labels = ["人脸打卡", "员工管理", "查看报表", "查看记录", "退出"]
+        buttons_icons = ['icon/人脸打卡.png', 'icon/员工管理.png', 'icon/查看报表.png', 'icon/查看记录.png',
+                         'icon/退出.png']
 
-    def button1_event(self):
-        msg_box = QMessageBox(QMessageBox.Information, '提示', '你点击了button1！')
+        # 创建按钮并添加到布局中
+        for label, icon in zip(buttons_labels, buttons_icons):
+            button = ButtonImage(label, icon)
+            button.setFixedSize(300, 300)
+            button.clicked.connect(lambda checked, msg=label: self.button_clicked(msg))  # 使用lambda表达式传递不同的消息
+            self.h_layout.addWidget(button)
+
+    def show_message_box(self, message):
+        """
+        显示一个带有指定消息的提示窗口。
+
+        参数:
+            message (str): 要在提示窗口中显示的消息文本。
+        """
+        # 创建一个QMessageBox对象
+        msg_box = QMessageBox()
+        # 设置消息框的类型为Information
+        msg_box.setIcon(QMessageBox.Information)
+        # 设置标题和消息文本
+        msg_box.setWindowTitle('提示')
+        msg_box.setText(message)
+
+        # 显示消息框并等待用户响应
         msg_box.exec_()
 
-    def button2_event(self):
-        msg_box = QMessageBox(QMessageBox.Information, '提示', '你点击了button2！')
-        msg_box.exec_()
+    def face_clock(self):
+        name = camera.clock_in()  # 开启摄像头，返回打卡员工名称
+        if name is not None:  # 如果员工名称有效
+            hr.add_lock_record(name)  # 保存打卡记录
+            self.show_message_box(name + " 打卡成功！")
 
-    def button3_event(self):
-        msg_box = QMessageBox(QMessageBox.Information, '提示', '你点击了button3！')
-        msg_box.exec_()
+    def button_clicked(self, msg):
+        # 通用的事件处理方法
+        if msg == "人脸打卡":
+            self.face_clock()
+        # 处理人脸打卡的逻辑
+        elif msg == "员工管理":
+            print(222222222222222)
+        elif msg == "查看报表":
+            print(222222222222222)
+        elif msg == "查看记录":
+            print(222222222222222)
+        elif msg == "退出":
+            print(222222222222222)
+    # 处理员工管理的逻辑
 
-    def button4_event(self):
-        msg_box = QMessageBox(QMessageBox.Information, '提示', '你点击了button2！')
-        msg_box.exec_()
 
-    def button5_event(self):
-        msg_box = QMessageBox(QMessageBox.Information, '提示', '你点击了button3！')
-        msg_box.exec_()
+
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ RECOGNIZER = cv2.face.LBPHFaceRecognizer_create()  # LBPH识别器
 # RECOGNIZER = cv2.face.EigenFaceRecognizer_create()#特征脸识别器
 # RECOGNIZER = cv2.face.FisherFaceRecognizer_create()  # LBPH识别器
 PASS_CONF = 45  # 最高评分，LBPH最高建议用45，特征脸最高建议用22000
-FACE_CASCADE = cv2.CascadeClassifier(os.getcwd() + "\\cascades\\haarcascade_frontalface_default.xml")  # 加载人脸识别级联分类器
+FACE_CASCADE = cv2.CascadeClassifier(os.getcwd() + r"\cascades\haarcascade_frontalface_default.xml")  # 加载人脸识别级联分类器
 
 
 # 训练识别器
