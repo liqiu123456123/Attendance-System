@@ -36,6 +36,39 @@ class ButtonImage(QPushButton):
         self.layout.addWidget(self.name_label)
 
 
+class CheckRecordsWin(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('CheckRecordsWin')
+        self.resize(400, 300)
+        # 创建垂直布局
+        layout = QHBoxLayout()
+        # 创建两个ButtonImage实例
+        button_image1 = ButtonImage('员工列表', 'icon/员工列表.png')
+        button_image2 = ButtonImage('打卡记录', 'icon/打卡记录.png')
+        # 将ButtonImage实例添加到布局中
+        button_image1.setFixedSize(300, 300)
+        button_image2.setFixedSize(300, 300)
+        layout.addWidget(button_image1)
+        layout.addWidget(button_image2)
+        button_image1.clicked.connect(self.get_employee)
+        button_image2.clicked.connect(self.get_record)
+        # 设置主窗口的布局
+        self.setLayout(layout)
+
+
+    def get_employee(self):
+        print("员工列表")
+        print_str = hr.get_employee_report()# 打印员工信息报表
+        print(print_str)
+
+    def get_record(self):
+        report = hr.get_record_all()
+        print(report)
+
 class MainWin(QWidget):
     def __init__(self):
         super(MainWin, self).__init__()
@@ -84,17 +117,16 @@ class MainWin(QWidget):
             self.face_clock()
         # 处理人脸打卡的逻辑
         elif msg == "员工管理":
-            print(222222222222222)
+            pass
+
         elif msg == "查看报表":
             print(222222222222222)
         elif msg == "查看记录":
-            print(222222222222222)
+            self.check_record = CheckRecordsWin()
+            self.check_record.show()
         elif msg == "退出":
             print(222222222222222)
     # 处理员工管理的逻辑
-
-
-
 
 
 if __name__ == "__main__":

@@ -28,25 +28,17 @@ def remove_employee(id):
 
 # 所有员工信息报表
 def get_employee_report():
-    # report = list()   # 员工信息列表
-    report = "###########################################\n"
-    report += "员工名单如下：\n"
-    i = 0  # 换行计数器
+    report = []   # 员工信息列表
     for emp in o.EMPLOYEES:  # 遍历所有员工
-        report += "(" + str(emp.id) + ")" + emp.name + "\t"
-        i += 1  # 计数器自增
-        if i == 4:  # 每四个员工换一行
-            report += "\n"
-            i = 0  # 计数器归零
-    report = report.strip()  # 清除报表结尾可能出现的换行符
-    report += "\n###########################################"
+        if emp.name not in report:
+            report.append(emp.name)
     return report
 
 
 # 通过特征码获取员工姓名
 def get_name_with_code(code):
     for emp in o.EMPLOYEES:
-        print("emp",emp)
+        print("emp", emp)
         if str(code) == str(emp.code):
             return emp.name
 
@@ -88,7 +80,7 @@ def add_lock_record(name):
 
 # 验证管理员账号和密码
 def valid_user(username, password):
-    print("o.USERS.keys()",o.USERS.keys())
+    print("o.USERS.keys()", o.USERS.keys())
     if username in o.USERS.keys():  # 如果有这个账号
         if o.USERS.get(username) == password:  # 如果账号和密码匹配
             return True  # 验证成功
