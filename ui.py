@@ -2,7 +2,7 @@ import sys
 from PyQt5.Qt import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, \
-    QPushButton, QLabel, QMessageBox
+    QPushButton, QLabel, QMessageBox,QTextEdit
 
 from util import camera
 from util import public_tools as tool
@@ -35,7 +35,26 @@ class ButtonImage(QPushButton):
         self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.name_label)
 
+class RecordWindow(QWidget):
+    def __init__(self, text):
+        super().__init__()
+        self.text = text
+        self.initUI()
 
+    def initUI(self):
+        # 创建文本框
+        text_edit = QTextEdit(self)
+        text_edit.setPlainText(self.text)
+        text_edit.setReadOnly(True)  # 如果不需要编辑文本，可以设置为只读
+        # 创建垂直布局
+        vbox = QVBoxLayout()
+        vbox.addWidget(text_edit)
+        # 设置窗口布局
+        self.setLayout(vbox)
+        # 设置窗口标题
+        self.setWindowTitle('QTextEdit')
+        # 调整窗口大小以适应文本框
+        self.resize(400, 300)
 class CheckRecordsWin(QWidget):
     def __init__(self):
         super().__init__()
@@ -61,9 +80,11 @@ class CheckRecordsWin(QWidget):
 
 
     def get_employee(self):
-        print("员工列表")
         print_str = hr.get_employee_report()# 打印员工信息报表
-        print(print_str)
+        print_str = '\n'.join(print_str)
+        self.text_win = RecordWindow(print_str)
+        self.text_win.show()
+
 
     def get_record(self):
         report = hr.get_record_all()
@@ -118,7 +139,6 @@ class MainWin(QWidget):
         # 处理人脸打卡的逻辑
         elif msg == "员工管理":
             pass
-
         elif msg == "查看报表":
             print(222222222222222)
         elif msg == "查看记录":
