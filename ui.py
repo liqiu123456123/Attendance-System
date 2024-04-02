@@ -2,7 +2,7 @@ import sys
 from PyQt5.Qt import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, \
-    QPushButton, QLabel, QMessageBox,QTextEdit
+    QPushButton, QLabel, QMessageBox, QTextEdit, QDesktopWidget
 
 from util import camera
 from util import public_tools as tool
@@ -14,6 +14,8 @@ ADMIN_LOGIN = False  # 管理员登录状态
 class ButtonImage(QPushButton):
     def __init__(self, name_label, image_url):
         super().__init__()
+        # 居中显示窗口
+
         self.initUI(name_label, image_url)
 
     def initUI(self, name_label, image_url):
@@ -35,6 +37,7 @@ class ButtonImage(QPushButton):
         self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.name_label)
 
+
 class RecordWindow(QWidget):
     def __init__(self, text):
         super().__init__()
@@ -55,6 +58,8 @@ class RecordWindow(QWidget):
         self.setWindowTitle('QTextEdit')
         # 调整窗口大小以适应文本框
         self.resize(400, 300)
+
+
 class CheckRecordsWin(QWidget):
     def __init__(self):
         super().__init__()
@@ -78,13 +83,11 @@ class CheckRecordsWin(QWidget):
         # 设置主窗口的布局
         self.setLayout(layout)
 
-
     def get_employee(self):
-        print_str = hr.get_employee_report()# 打印员工信息报表
+        print_str = hr.get_employee_report()  # 打印员工信息报表
         print_str = '\n'.join(print_str)
         self.text_win = RecordWindow(print_str)
         self.text_win.show()
-
 
     def get_record(self):
         print_str = hr.get_record_all()
@@ -92,10 +95,13 @@ class CheckRecordsWin(QWidget):
         self.text_win = RecordWindow(print_str)
         self.text_win.show()
 
+
 class MainWin(QWidget):
     def __init__(self):
         super(MainWin, self).__init__()
+
         self.resize(900, 600)
+        self.move(100,300)
         self.h_layout = QHBoxLayout(self)  # 直接设置给self，避免额外的变量
         self.h_layout.setContentsMargins(100, 0, 100, 0)
         # 按钮的标签和图标路径
@@ -147,7 +153,8 @@ class MainWin(QWidget):
             self.check_record = CheckRecordsWin()
             self.check_record.show()
         elif msg == "退出":
-            print(222222222222222)
+            self.close()
+
     # 处理员工管理的逻辑
 
 
