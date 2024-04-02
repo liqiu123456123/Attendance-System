@@ -87,8 +87,10 @@ class CheckRecordsWin(QWidget):
 
 
     def get_record(self):
-        report = hr.get_record_all()
-        print(report)
+        print_str = hr.get_record_all()
+        print_str = '\n'.join(print_str)
+        self.text_win = RecordWindow(print_str)
+        self.text_win.show()
 
 class MainWin(QWidget):
     def __init__(self):

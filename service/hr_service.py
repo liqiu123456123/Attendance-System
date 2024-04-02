@@ -53,12 +53,13 @@ def get_code_with_id(id):
 # 获取所有员工的打卡记录信息
 def get_record_all():
     record = o.LOCK_RECORD  # 获得打卡记录字典
-    report = ""  # 报表内容
+    report = []  # 报表内容
     for name in record.keys():  # 遍历所有名字
-        report += "-----------------------------------\n"
-        report += name + "  打卡记录如下：\n"
+        report.append("---------------------------")
+        report.append(name)
+        report.append("---------------------------")
         for date in record[name]:  # 遍历所有时间字符串
-            report += date + "\n"
+            report.append(date)
     return report
 
 
