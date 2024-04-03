@@ -60,6 +60,41 @@ class RecordWindow(QWidget):
         self.resize(400, 300)
 
 
+class ReportWin(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('CheckRecordsWin')
+        self.resize(400, 300)
+        # 创建垂直布局
+        layout = QHBoxLayout()
+        # 创建两个ButtonImage实例
+        button_image1 = ButtonImage('日报', 'icon/日报.png')
+        button_image2 = ButtonImage('月报', 'icon/月报.png')
+        button_image3 = ButtonImage('报表设置', 'icon/报表设置.png')
+        # 将ButtonImage实例添加到布局中
+        button_image1.setFixedSize(300, 300)
+        button_image2.setFixedSize(300, 300)
+        button_image3.setFixedSize(300, 300)
+        layout.addWidget(button_image1)
+        layout.addWidget(button_image2)
+        layout.addWidget(button_image3)
+        button_image1.clicked.connect(self.get_day_report)
+        button_image2.clicked.connect(self.get_month_report)
+        button_image3.clicked.connect(self.report_set)
+        # 设置主窗口的布局
+        self.setLayout(layout)
+
+    def get_day_report(self):
+        pass
+
+    def get_month_report(self):
+        pass
+
+    def report_set(self):
+        pass
 class CheckRecordsWin(QWidget):
     def __init__(self):
         super().__init__()
@@ -105,7 +140,7 @@ class MainWin(QWidget):
         self.h_layout = QHBoxLayout(self)  # 直接设置给self，避免额外的变量
         self.h_layout.setContentsMargins(100, 0, 100, 0)
         # 按钮的标签和图标路径
-        buttons_labels = ["人脸打卡", "员工管理", "查看报表", "查看记录", "退出"]
+        buttons_labels = ["人脸打卡", "员工管理", "考勤报表", "查看记录", "退出"]
         buttons_icons = ['icon/人脸打卡.png', 'icon/员工管理.png', 'icon/查看报表.png', 'icon/查看记录.png',
                          'icon/退出.png']
 
@@ -147,8 +182,9 @@ class MainWin(QWidget):
         # 处理人脸打卡的逻辑
         elif msg == "员工管理":
             pass
-        elif msg == "查看报表":
-            print(222222222222222)
+        elif msg == "考勤报表":
+            self.report_win = ReportWin()
+            self.report_win.show()
         elif msg == "查看记录":
             self.check_record = CheckRecordsWin()
             self.check_record.show()
