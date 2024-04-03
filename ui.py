@@ -59,6 +59,34 @@ class RecordWindow(QWidget):
         # 调整窗口大小以适应文本框
         self.resize(400, 300)
 
+class StaffWin(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('CheckRecordsWin')
+        self.resize(400, 300)
+        # 创建垂直布局
+        layout = QHBoxLayout()
+        # 创建两个ButtonImage实例
+        button_image1 = ButtonImage('新增员工', 'icon/新增员工.png')
+        button_image2 = ButtonImage('删除员工', 'icon/删除员工.png')
+        # 将ButtonImage实例添加到布局中
+        button_image1.setFixedSize(300, 300)
+        button_image2.setFixedSize(300, 300)
+        layout.addWidget(button_image1)
+        layout.addWidget(button_image2)
+        button_image1.clicked.connect(self.add_staff)
+        button_image2.clicked.connect(self.remove_staff)
+        # 设置主窗口的布局
+        self.setLayout(layout)
+
+    def add_staff(self):
+        pass
+
+    def remove_staff(self):
+        pass
 
 class ReportWin(QWidget):
     def __init__(self):
@@ -181,7 +209,8 @@ class MainWin(QWidget):
             self.face_clock()
         # 处理人脸打卡的逻辑
         elif msg == "员工管理":
-            pass
+            self.staff = StaffWin()
+            self.staff.show()
         elif msg == "考勤报表":
             self.report_win = ReportWin()
             self.report_win.show()
