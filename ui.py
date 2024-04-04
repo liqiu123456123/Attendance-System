@@ -55,7 +55,26 @@ class ButtonImage(QPushButton):
         self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.name_label)
 
+class RemoveRecordWindow(QWidget):
+    def __init__(self, text):
+        super().__init__()
+        self.text = text
+        self.initUI()
 
+    def initUI(self):
+        # 创建文本框
+        text_edit = QTextEdit(self)
+        text_edit.setPlainText(self.text)
+        text_edit.setReadOnly(True)  # 如果不需要编辑文本，可以设置为只读
+        # 创建垂直布局
+        vbox = QVBoxLayout()
+        vbox.addWidget(text_edit)
+        # 设置窗口布局
+        self.setLayout(vbox)
+        # 设置窗口标题
+        self.setWindowTitle('QTextEdit')
+        # 调整窗口大小以适应文本框
+        self.resize(400, 300)
 class RecordWindow(QWidget):
     def __init__(self, text):
         super().__init__()
@@ -111,7 +130,10 @@ class StaffWin(QWidget):
         self.show_message_box("请面对摄像头，敲击三次回车键完成拍照！")
         camera.register(code)  # 打开摄像头为员工照相
     def remove_staff(self):
-        pass
+        print_str = hr.get_employee_report()  # 打印员工信息报表
+        print_str = '\n'.join(print_str)
+        self.text_win = RecordWindow(print_str)
+        self.text_win.show()
 
 
     def show_message_box(self, message):

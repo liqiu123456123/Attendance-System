@@ -31,8 +31,8 @@ def get_employee_report():
     report = []   # 员工信息列表
     for emp in o.EMPLOYEES:  # 遍历所有员工
         if emp.name not in report:
-            report.append(emp.name)
-    return report
+            report.append(emp.name+":"+str(emp.id))
+    return list(set(report))
 
 
 # 通过特征码获取员工姓名

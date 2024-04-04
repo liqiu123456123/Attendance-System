@@ -60,11 +60,20 @@ def checking_data_files():
 def load_employee_info():
     max_id = 1  # 最大员工ID
     file = open(DATA_FILE, "r", encoding="utf-8")  # 打开文件，只读
+    existing_ids = set()  # 用于存储已存在的员工ID
+
     for line in file.readlines():  # 遍历文件中的行内容
         id, name, code = line.rstrip().split(",")  # 去除换行符，并分割字符串信息
-        o.add(o.Employee(id, name, code))  # 组织结构中添加员工信息
-        if int(id) > max_id:  # 如果发现某员工的id更大
-            max_id = int(id)  # 修改最大ID
+
+        # 检查员工ID是否已经存在
+        if id not in existing_ids:
+            o.add(o.Employee(id, name, code))  # 组织结构中添加员工信息
+            existing_ids.add(id)  # 将ID添加到已存在ID的集合中
+
+            # 更新最大ID
+            if int(id) > max_id:
+                max_id = int(id)
+
     o.MAX_ID = max_id  # 记录最大ID
     file.close()  # 关闭文件
 
