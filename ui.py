@@ -1,8 +1,8 @@
 import sys
 from PyQt5.Qt import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, \
-    QPushButton, QLabel, QMessageBox, QTextEdit, QDesktopWidget
+from PyQt5.QtWidgets import QHBoxLayout, \
+    QLabel, QMessageBox, QTextEdit,QApplication, QWidget, QPushButton, QVBoxLayout, QDialog, QLineEdit, QDialogButtonBox
 
 from util import camera
 from util import public_tools as tool
@@ -10,6 +10,24 @@ from service import hr_service as hr
 
 ADMIN_LOGIN = False  # 管理员登录状态
 
+
+
+
+class PopupDialog(QDialog):
+    def __init__(self, parent=None):
+        super(PopupDialog, self).__init__(parent)
+        self.resize(300, 200)
+        self.setWindowTitle('输入新员工的姓名')
+        self.line_edit = QLineEdit(self)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        self.button_box.accepted.connect(self.accept)
+        layout = QVBoxLayout()
+        layout.addWidget(self.line_edit)
+        layout.addWidget(self.button_box)
+        self.setLayout(layout)
+
+    def text_value(self):
+        return self.line_edit.text()
 
 class ButtonImage(QPushButton):
     def __init__(self, name_label, image_url):
@@ -83,11 +101,36 @@ class StaffWin(QWidget):
         self.setLayout(layout)
 
     def add_staff(self):
-        pass
-
+        dialog = PopupDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            text_value = dialog.text_value()
+            self.handle_text(text_value)
+    def handle_text(self, text):
+        self.add_name = text
+        code = hr.add_new_employee(self.add_name)
+        self.show_message_box("请面对摄像头，敲击三次回车键完成拍照！")
+        camera.register(code)  # 打开摄像头为员工照相
     def remove_staff(self):
         pass
 
+
+    def show_message_box(self, message):
+        """
+        显示一个带有指定消息的提示窗口。
+
+        参数:
+            message (str): 要在提示窗口中显示的消息文本。
+        """
+        # 创建一个QMessageBox对象
+        msg_box = QMessageBox()
+        # 设置消息框的类型为Information
+        msg_box.setIcon(QMessageBox.Information)
+        # 设置标题和消息文本
+        msg_box.setWindowTitle('提示')
+        msg_box.setText(message)
+
+        # 显示消息框并等待用户响应
+        msg_box.exec_()
 class ReportWin(QWidget):
     def __init__(self):
         super().__init__()
