@@ -91,8 +91,8 @@ def valid_user(username, password):
 # 打印今天的打卡日报
 def get_today_report():
     date = datetime.datetime.now().strftime("%Y-%m-%d")  # 今天的日期
-    get_day_report(str(date))  # 打印今天的日报
-
+    output = get_day_report(str(date))  # 打印今天的日报
+    return output
 
 # 打印指定日期的打卡日报
 def get_day_report(date):
@@ -126,32 +126,52 @@ def get_day_report(date):
             absent_list.append(emp.name)  # 加入缺席名单
 
     emp_count = len(o.EMPLOYEES)  # 员工总人数
-    print("--------" + date + "--------")
-    print("应到人数：" + str(emp_count))
-    print("缺席人数：" + str(len(absent_list)))
+    # print("--------" + date + "--------")
+    # print("应到人数：" + str(emp_count))
+    # print("缺席人数：" + str(len(absent_list)))
     absent_name = ""  # 缺席名单
     if len(absent_list) == 0:  # 如果没有缺席的
         absent_name = "(空)"
     else:  # 有缺席的
         for name in absent_list:  # 遍历缺席列表
             absent_name += name + " "  # 拼接名字
-    print("缺席名单：" + absent_name)
-    print("迟到人数：" + str(len(late_list)))
+    # print("缺席名单：" + absent_name)
+    # print("迟到人数：" + str(len(late_list)))
     late_name = ""  # 迟到名单
     if len(late_list) == 0:  # 如果没有迟到的
         late_name = "(空)"
     else:  # 有迟到的
         for name in late_list:  # 遍历迟到列表
             late_name += name + " "  # 拼接名字
-    print("迟到名单：" + str(late_name))
-    print("早退人数：" + str(len(left_early)))
+    # print("迟到名单：" + str(late_name))
+    # print("早退人数：" + str(len(left_early)))
     early_name = ""  # 早退名单
     if len(left_early) == 0:  # 如果没有早退的
         early_name = "(空)"
     else:  # 有早退的
         for name in left_early:  # 遍历早退列表
             early_name += name + " "  # 拼接名字
-    print("早退名单：" + early_name)
+    # print("早退名单：" + early_name)
+
+    output = (
+            "--------" + date + "--------\n"
+                                "应到人数：" + str(emp_count) + "\n"
+                                                               "缺席人数：" + str(len(absent_list)) + "\n"
+    )
+    output += "缺席名单：" + absent_name + "\n"
+
+    output += (
+            "迟到人数：" + str(len(late_list)) + "\n"
+    )
+    output += "迟到名单：" + late_name + "\n"
+
+    output += (
+            "早退人数：" + str(len(left_early)) + "\n"
+    )
+    output += "早退名单：" + early_name + "\n"
+    # 打印合并后的字符串
+    # print(output)
+    return output
 
 
 # 创建上个月打卡记录月报

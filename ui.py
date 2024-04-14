@@ -11,7 +11,29 @@ from service import hr_service as hr
 ADMIN_LOGIN = False  # 管理员登录状态
 
 
+class DayReportDialog(QDialog):
+    def __init__(self, parent=None):
+        super(DayReportDialog, self).__init__(parent)
+        self.resize(300, 200)
+        self.setWindowTitle('输入查询日期')
 
+        # 创建标签
+        self.label = QLabel('输入查询日期，格式为(2008-08-08)，输入0则查询今天', self)
+
+        self.line_edit = QLineEdit(self)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        self.button_box.accepted.connect(self.accept)
+
+        layout = QVBoxLayout()
+        # 先添加标签，再添加文本框和按钮
+        layout.addWidget(self.label)
+        layout.addWidget(self.line_edit)
+        layout.addWidget(self.button_box)
+
+        self.setLayout(layout)
+
+    def text_value(self):
+        return self.line_edit.text()
 
 class PopupDialog(QDialog):
     def __init__(self, parent=None):
@@ -202,8 +224,18 @@ class ReportWin(QWidget):
         self.setLayout(layout)
 
     def get_day_report(self):
-        pass
-
+        dialog = DayReportDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            text_value = dialog.text_value()
+            if text_value == "0":  # 如果只输入0
+                day_report = hr.get_today_report()  # 打印今天的日报
+                self.text_win = RecordWindow(day_report)
+                self.text_win.show()
+            elif tool.valid_date(text_value):  # 如果输入的日期格式有效
+                hr.get_day_report(text_value)
+            else:  # 如果输入的日期格式无效
+                print("日期格式有误，请重新输入！")
+            # 打印指定日期的日报
     def get_month_report(self):
         pass
 
@@ -251,6 +283,7 @@ class MainWin(QWidget):
 
         self.resize(900, 600)
         self.move(100,300)
+        self.setWindowTitle("基于Python的人脸识别考勤系统")
         self.h_layout = QHBoxLayout(self)  # 直接设置给self，避免额外的变量
         self.h_layout.setContentsMargins(100, 0, 100, 0)
         # 按钮的标签和图标路径
