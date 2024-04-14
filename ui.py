@@ -29,6 +29,22 @@ class PopupDialog(QDialog):
     def text_value(self):
         return self.line_edit.text()
 
+class RemoveDialog(QDialog):
+    def __init__(self, parent=None):
+        super(RemoveDialog, self).__init__(parent)
+        self.resize(300, 200)
+        self.setWindowTitle('输出要删除员工的编号')
+        self.line_edit = QLineEdit(self)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        self.button_box.accepted.connect(self.accept)
+        layout = QVBoxLayout()
+        layout.addWidget(self.line_edit)
+        layout.addWidget(self.button_box)
+        self.setLayout(layout)
+
+    def text_value(self):
+        return self.line_edit.text()
+
 class ButtonImage(QPushButton):
     def __init__(self, name_label, image_url):
         super().__init__()
@@ -130,10 +146,15 @@ class StaffWin(QWidget):
         self.show_message_box("请面对摄像头，敲击三次回车键完成拍照！")
         camera.register(code)  # 打开摄像头为员工照相
     def remove_staff(self):
-        print_str = hr.get_employee_report()  # 打印员工信息报表
-        print_str = '\n'.join(print_str)
-        self.text_win = RecordWindow(print_str)
-        self.text_win.show()
+        dialog = RemoveDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            id_value = int(dialog.text_value())
+            if id_value > 0:  # 只要输入的不是0
+                if hr.check_id(id_value):  # 若此编号有对应员工
+                    hr.remove_employee(id_value)  # 人事服务删除该员工
+                    self.show_message_box(str(id_value) + "号员工已删除！")
+                else:
+                    self.show_message_box("无此员工，操作取消")
 
 
     def show_message_box(self, message):
