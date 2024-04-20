@@ -1,49 +1,47 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QDialog, QLineEdit, QDialogButtonBox
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QTimeEdit,QHBoxLayout
 
 
-class PopupDialog(QDialog):
-    def __init__(self, parent=None):
-        super(PopupDialog, self).__init__(parent)
-        self.setWindowTitle('输入对话框')
-        self.line_edit = QLineEdit(self)
-        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok)
-        self.button_box.accepted.connect(self.accept)
-        layout = QVBoxLayout()
-        layout.addWidget(self.line_edit)
-        layout.addWidget(self.button_box)
-        self.setLayout(layout)
-
-    def text_value(self):
-        return self.line_edit.text()
-
-
-class MainWindow(QWidget):
+class TimeSetter(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
-        self.start_button = QPushButton('开始', self)
-        self.start_button.clicked.connect(self.show_popup)
+        # 创建一个垂直布局
         layout = QVBoxLayout()
-        layout.addWidget(self.start_button)
+        layout_1 = QHBoxLayout()
+        layout_2 = QHBoxLayout()
+        # 创建一个标签
+        label = QLabel('上班时间：')
+        label_1 = QLabel('下班时间：')
+
+        # 创建一个时间编辑控件
+        time_edit = QTimeEdit()
+        time_edit.setDisplayFormat('HH:mm')  # 设置时间格式
+
+        time_edit_1 = QTimeEdit()
+        time_edit_1.setDisplayFormat('HH:mm')  # 设置时间格式
+
+
+        # 将标签和时间编辑控件添加到布局中
+        layout_1.addWidget(label)
+        layout_1.addWidget(time_edit)
+
+        layout_2.addWidget(label_1)
+        layout_2.addWidget(time_edit_1)
+        layout.addLayout(layout_1)
+        layout.addLayout(layout_2)
+        # 设置窗口的布局
         self.setLayout(layout)
-        self.setWindowTitle('主窗体')
-        self.show()
 
-    def show_popup(self):
-        dialog = PopupDialog(self)
-        if dialog.exec_() == QDialog.Accepted:
-            text_value = dialog.text_value()
-            self.handle_text(text_value)
-
-    def handle_text(self, text):
-        print(f'接收到的文本: {text}')
-        # 在这里处理接收到的文本，例如更新UI或执行其他操作。
+        # 设置窗口的标题和大小
+        self.setWindowTitle('上下班时间设置')
+        self.setGeometry(300, 300, 250, 150)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    main_window = MainWindow()
+    ex = TimeSetter()
+    ex.show()
     sys.exit(app.exec_())
