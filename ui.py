@@ -1,5 +1,5 @@
 import sys
-from PyQt5.Qt import QPixmap
+from PyQt5.Qt import QPixmap, QIcon
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QHBoxLayout, \
     QLabel, QMessageBox, QTextEdit,QApplication, QWidget, QPushButton, QVBoxLayout, QDialog, QLineEdit, QDialogButtonBox
@@ -281,6 +281,11 @@ class MainWin(QWidget):
     def __init__(self):
         super(MainWin, self).__init__()
 
+        # 创建一个 QIcon 对象，加载图标文件
+        icon = QIcon("icon.ico")
+
+        # 使用 setWindowIcon() 方法设置窗体图标
+        self.setWindowIcon(icon)
         self.resize(900, 600)
         self.move(100,300)
         self.setWindowTitle("基于Python的人脸识别考勤系统")
